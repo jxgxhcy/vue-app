@@ -20,29 +20,34 @@
             <label for="age" class="control-label">年龄：</label>
             <input type="number" class="form-control" id="age" v-model="user.age" placeholder="请输入年龄">
         </div>
-        <button type="reset" class="btn btn-primary pull-right margin-left">重置</button>
-        <button type="button" class="btn btn-danger pull-right" v-on:click="add(user)">添加</button>
+        <button type="button" class="btn btn-primary pull-right margin-left" v-on:click="reset">重置</button>
+        <button type="button" class="btn btn-danger pull-right" v-on:click="add">添加</button>
         <div class="clearfix"></div>
     </form>
-    <div class="page-header">
-        <h3 class="text-primary">用户信息表</h3>
-    </div>
     <table class="table table-bordered text-center" v-if="users.length>0">
+        <caption>
+            <h3 class="text-primary">用户信息表</h3></caption>
+        <thead>
         <tr class="text-danger">
             <th>序号</th>
             <th>姓名</th>
             <th>年龄</th>
             <th>操作</th>
         </tr>
+        </thead>
         <tr v-for="(user,index) in users">
             <td>{{index+1}}</td>
             <td>{{user.name}}</td>
             <td>{{user.age}}</td>
-            <td><button class="btn btn-primary btn-sm" v-on:click="remove(index)">删除</button></td>
+            <td>
+                <button class="btn btn-primary btn-sm" v-on:click="remove(index)">删除</button>
+            </td>
         </tr>
         <tr>
             <td>共-{{counts}}-条</td>
-            <td colspan="3"><button class="btn btn-danger btn-sm" v-on:click="clear">删除全部</button></td>
+            <td colspan="3">
+                <button class="btn btn-danger btn-sm" v-on:click="clear">删除全部</button>
+            </td>
         </tr>
     </table>
 </div>
@@ -51,27 +56,34 @@
 <script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
 <script>
     new Vue({
-        el:".container",
+        el: ".container",
         data: {
-            user:{
-                name:"jack",
-                age:15
+            user: {
+                name: "jack",
+                age: 15
             },
-            users:[]
+            users: [
+                {name: "miko", age: 16},
+                {name: "lucifer", age: 50}
+            ]
         },
-        methods:{
-            add:function (user) {
-                this.users.push(user);
+        methods: {
+            add: function () {
+                this.users.push(this.user);
+                this.reset();
             },
-            remove:function (index) {
-                this.users.splice(index,1);
+            remove: function (index) {
+                this.users.splice(index, 1);
             },
-            clear:function () {
-                this.users=[];
+            clear: function () {
+                this.users = [];
+            },
+            reset: function () {
+                this.user = {name: "jack", age: 15};
             }
         },
-        computed:{
-            counts:function () {
+        computed: {
+            counts: function () {
                 return this.users.length;
             }
         }
