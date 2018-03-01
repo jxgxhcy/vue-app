@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/ext_bs.css">
+
+</head>
+<body>
+<div class="container">
+    <form class="border border-gray padding">
+        <div class="form-group">
+            <label for="name" class="control-label">用户名：</label>
+            <input type="text" class="form-control" id="name" v-model="user.name" placeholder="请输入用户名">
+        </div>
+        <div class="form-group">
+            <label for="age" class="control-label">年龄：</label>
+            <input type="number" class="form-control" id="age" v-model="user.age" placeholder="请输入年龄">
+        </div>
+        <button type="reset" class="btn btn-primary pull-right margin-left">重置</button>
+        <button type="button" class="btn btn-danger pull-right" v-on:click="add(user)">添加</button>
+        <div class="clearfix"></div>
+    </form>
+    <div class="page-header">
+        <h3 class="text-primary">用户信息表</h3>
+    </div>
+    <table class="table table-bordered text-center" v-if="users.length>0">
+        <tr class="text-danger">
+            <th>序号</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>操作</th>
+        </tr>
+        <tr v-for="(user,index) in users">
+            <td>{{index+1}}</td>
+            <td>{{user.name}}</td>
+            <td>{{user.age}}</td>
+            <td><button class="btn btn-primary btn-sm" v-on:click="remove(index)">删除</button></td>
+        </tr>
+        <tr>
+            <td>共-{{counts}}-条</td>
+            <td colspan="3"><button class="btn btn-danger btn-sm" v-on:click="clear">删除全部</button></td>
+        </tr>
+    </table>
+</div>
+
+
+<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+<script>
+    new Vue({
+        el:".container",
+        data: {
+            user:{
+                name:"jack",
+                age:15
+            },
+            users:[]
+        },
+        methods:{
+            add:function (user) {
+                this.users.push(user);
+            },
+            remove:function (index) {
+                this.users.splice(index,1);
+            },
+            clear:function () {
+                this.users=[];
+            }
+        },
+        computed:{
+            counts:function () {
+                return this.users.length;
+            }
+        }
+    });
+</script>
+</body>
+</html>
