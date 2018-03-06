@@ -1,0 +1,160 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>list1</title>
+
+    <link rel="stylesheet" href="http://jxgxhcy.gitee.io/css/ext_bs.css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div class="container">
+    <app-header></app-header>
+    <router-view></router-view>
+</div>
+
+<script src="https://cdn.bootcss.com/vue/2.5.13/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/vue-router/3.0.1/vue-router.min.js"></script>
+<script>
+
+    let home = {
+        template: "<div class=\"panel panel-default\">\n" +
+        "            <div class=\"panel-heading\">\n" +
+        "                <h3 class=\"panel-title\">\n" +
+        "                    <router-link class='btn btn-link' to='/home/login'>登录</router-link>" +
+        "                        <router-link class='btn btn-link' to='/home/register'>注册</router-link>\n" +
+        "                </h3>\n" +
+        "            </div>\n" +
+        "            <div class=\"panel-body\">" +
+        "                   <router-view></router-view>" +
+        "           </div>\n" +
+        "        </div>"
+    };
+    let list = {
+        template: "<ul class=\"list-group\">\n" +
+        "        <li class=\"list-group-item\" v-for=\"item in lists\">\n" +
+        "            {{item}}\n" +
+        "        </li>\n" +
+        "    </ul>",
+        data() {
+            return {
+                lists: ["列表项.1", "列表项.2", "列表项.3", "列表项.4", "列表项.5"]
+            }
+        }
+    };
+
+    let login = {
+        template: "<form>\n" +
+        "        <div class=\"form-group\">\n" +
+        "            <label class=\"label-control\">用户名：</label>\n" +
+        "            <input type=\"text\" class=\"form-control\" placeholder=\"请输入用户名\" v-model=\"user.name\">\n" +
+        "        </div>\n" +
+        "        <div class=\"form-group\">\n" +
+        "            <label class=\"label-control\">密码：</label>\n" +
+        "            <input type=\"password\" class=\"form-control\" placeholder=\"请输入密码\" v-model=\"user.pwd\">\n" +
+        "        </div>\n" +
+        "        <div class=\"form-group\">\n" +
+        "            <button class=\"btn btn-danger\" @click=\"log\">登录</button>\n" +
+        "        </div>\n" +
+        "    </form>",
+        data() {
+            return {
+                user: {
+                    name: "jack",
+                    pwd: "123456"
+                }
+            }
+        },
+        methods: {
+            log: function () {
+                alert("登录 事件！" + this.user.name + "-" + this.user.pwd);
+            }
+        }
+    };
+
+    let register = {
+        template: "<form>\n" +
+        "        <div class=\"form-group\">\n" +
+        "            <label class=\"label-control\">用户名：</label>\n" +
+        "            <input type=\"text\" class=\"form-control\" placeholder=\"请输入用户名\" v-model.lazy=\"user.name\">\n" +
+        "        </div>\n" +
+        "        <div class=\"form-group\">\n" +
+        "            <label class=\"label-control\">密码：</label>\n" +
+        "            <input type=\"password\" class=\"form-control\" placeholder=\"请输入密码\" v-model.lazy=\"user.pwd\">\n" +
+        "        </div>\n" +
+        "        <div class=\"form-group\">\n" +
+        "            <label class=\"label-control\">年龄：</label>\n" +
+        "            <input type=\"number\" class=\"form-control\" placeholder=\"请输入年龄\" v-model.lazy.number=\"user.age\">\n" +
+        "        </div>\n" +
+        "        <div class=\"form-group\">\n" +
+        "            <button class=\"btn btn-danger\" @click=\"reg\">注册</button>\n" +
+        "        </div>\n" +
+        "    </form>",
+        data() {
+            return {
+                user: {
+                    name: "jack",
+                    pwd: "123456",
+                    age: 15
+                }
+            }
+        },
+        methods: {
+            reg: function () {
+                alert("注册 事件！" + this.user.name + "-" + this.user.pwd + "-" + this.user.age);
+            }
+        }
+    };
+
+    const router = new VueRouter({
+        routes: [
+            {
+                path: '/home', component: home, children: [
+                    {path: "/home", redirect: "/home/login"},
+                    {path: "/home/login", component: login},
+                    {path: "/home/register", component: register}
+                ]
+            },
+            {path: '/list', component: list},
+            {path: '*', redirect: "/home"}
+        ],
+        linkActiveClass: "text-red",
+        /*linkExactActiveClass:"text-red"*/
+
+    });
+
+    let appHeader = {
+        template: "<nav class=\"navbar navbar-default\">\n" +
+        "        <a class=\"navbar-brand\" href='#/home'>作业</a>\n" +
+        "        <ul class=\"nav navbar-nav\">\n" +
+        "            <li v-for='menu in menuList'>\n" +
+        "                <router-link :to=\"menu.path\">{{menu.text}}</router-link>\n" +
+        "            </li>\n" +
+        "        </ul>\n" +
+        "    </nav>",
+        data() {
+            return {
+                menuList: [
+                    {text: "首页", path: "/home"},
+                    {text: "列表", path: "/list"}
+                ]
+            }
+        }
+    };
+    new Vue({
+        el: ".container",
+        router,
+        components: {
+            "app-header": appHeader
+        }
+    });
+
+</script>
+</body>
+</html>
